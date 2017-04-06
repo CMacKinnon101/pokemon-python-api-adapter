@@ -82,3 +82,5 @@ for pokemontcgapi_set in pokemontcgapi_sets:
             "release_date": pokemontcgapi_set.release_date
         })
         print("Finished inserting {0}({1})\n\n".format(pokemontcgapi_set.name, pokemontcgapi_set.code))
+print("\nClosing connection to {0}".format(host))
+mongo_client.close()
