@@ -1,12 +1,18 @@
 #Modules
+import configparser
 from pokemontcgsdk import Set
 from pokemontcgsdk import Card
 from pymongo import MongoClient
 
 #Config
-host = "pokemoncards.win"
-port = "27017"
-connection_string = "mongodb://{0}:{1}".format(host, port)
+Config = configparser.ConfigParser()
+Config.read("settings.ini")
+host = Config.get("db", "host")
+port = Config.get("db", "port")
+user = Config.get("db", "user")
+password = Config.get("db", "password")
+#Build Connection String
+connection_string = "mongodb://{0}:{1}@{2}:{3}".format(user, password, host, port)
 
 #Get the sets from the pokemontcg api
 print("Getting sets from pokemontcgsdk")

@@ -90,3 +90,6 @@ ENV/
 
 #pycharm project files
 .idea
+
+#ignore our db information
+settings.ini
