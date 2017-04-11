@@ -11,8 +11,16 @@ host = Config.get("db", "host")
 port = Config.get("db", "port")
 user = Config.get("db", "user")
 password = Config.get("db", "password")
+
+pass_colon_str = ""
+at_str = ""
+
+if user:
+    pass_colon_str = ":"
+    at_str = "@"
+
 #Build Connection String
-connection_string = "mongodb://{0}:{1}@{2}:{3}".format(user, password, host, port)
+connection_string = "mongodb://{0}{1}{2}{3}{4}:{5}".format(user, pass_colon_str, password, at_str, host, port)
 
 #Get the sets from the pokemontcg api
 print("Getting sets from pokemontcgsdk")
@@ -26,9 +34,9 @@ print("Connecting to {0}".format(connection_string))
 mongo_client = MongoClient(connection_string)
 
 #Get the Database Object
-test_database = mongo_client.test
-sets_collection = test_database.sets
-cards_collection = test_database.cards
+card_data_database = mongo_client.card_data
+sets_collection = card_data_database.sets
+cards_collection = card_data_database.cards
 
 #Get all the sets that we already have cards for
 print("\nGetting sets from {0}".format(host))
@@ -52,7 +60,7 @@ for pokemontcgapi_set in pokemontcgapi_sets:
         print("***********************************")
         #Get the cards from the set
         cards = Card.where(setCode=pokemontcgapi_set.code).all()
-        #Insert each card insert a record into mongo
+        #Insert each card document into mongo
         for card in cards:
             print("-- {0}({1})".format(card.name, card.id))
             cards_collection.insert_one({
